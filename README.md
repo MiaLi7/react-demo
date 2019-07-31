@@ -1,9 +1,9 @@
 # 基于create-react-app引入router、redux、saga的脚手架搭建
 
 ## 一、背景介绍
-之前我们已经试过基于create-react-app分别单独引入router、redux、saga搭建的脚手架，现在我们把router、redux、saga三个一起引入，并基于它们做一个简单的例子测试一下。
+之前我们已经试过基于`create-react-app`分别单独引入`router、redux、saga`搭建的脚手架，现在我们把`router、redux、saga`三个一起引入，并基于它们做一个简单的例子测试一下。
 
-例子中共分为两个组件，即两个不同的页面，通过router实现不同页面的跳转，有一个页面使用redux做一个简单的计数器，另一个页面使用saga实现异步请求获取远端服务器的数据，并把获取到的数据显示出来。下面我们具体看看如何一起引入router、redux、saga搭建脚手架。
+例子中共分为两个组件，即两个不同的页面，通过`router`实现不同页面的跳转，有一个页面使用`redux`做一个简单的计数器，另一个页面使用`saga`实现异步请求获取远端服务器的数据，并把获取到的数据显示出来。下面我们具体看看如何一起引入`router、redux、saga`搭建脚手架。
 
 
 ## 二、实现步骤
@@ -47,11 +47,11 @@
 
 启动项目，项目启动后会自动打开一个浏览器窗口加载页面，则项目启动完成。当浏览器加载页面情况如下图代表启动成功。
 
-![启动成功](https://github.com/LiJinLan/redux-saga-demo/raw/master/redux-saga-images/start.png "启动成功")
+![启动成功](https://github.com/LiJinLan/react-demo/raw/master/react-demo-images/start.png "启动成功")
 
 
 ### 4、下载相关依赖
-先关闭刚才启动的项目，在命令行窗口，同时按住键盘`ctrl+C`按键，在显示的命令处输入“y”即可关闭项目。今天我们做的项目分别都要用到router、redux、saga、axios,所以要下载相关的依赖文件。在命令行窗口依次输入
+先关闭刚才启动的项目，在命令行窗口，同时按住键盘`ctrl+C`按键，在显示的命令处输入“y”即可关闭项目。今天我们做的项目分别都要用到`router、redux、saga、axios`,所以要下载相关的依赖文件。在命令行窗口依次输入
 
 	$ npm install react-router-dom --save
 	$ npm install redux --save
@@ -60,7 +60,7 @@
 	$ npm install axios --save
 
 下载完成后，打开`package.json`文件，即可发现在`dependencies`中多了这些依赖版本号。
-
+![依赖](https://github.com/LiJinLan/react-demo/raw/master/react-demo-images/package.png "依赖")
 
 
 下载完依赖，就可以启动项目了，在命令行窗口输入:
@@ -70,9 +70,9 @@
 
 ### 6、具体实现过程
 #### (1). 引入redux,实现计数器组件
-在src文件夹下新建一个文件夹components，用来存放自定义的组件及相关逻辑处理，在components文件下新建一个文件夹Counter,用来存放计数器组件。在couter文件夹下新建文件index.js,定义计数器组件，并将组件与store建立连接。
+在src文件夹下新建一个文件夹`components`，用来存放自定义的组件及相关逻辑处理，在`components`文件下新建一个文件夹`Counter`,用来存放计数器组件。在`Couter`文件夹下新建文件`index.js`,定义计数器组件，并将组件与`store`建立连接。
 
-src/components/Counter/index.js代码如下
+`src/components/Counter/index.js`代码如下
 
 	import React, { Component } from 'react';
 	import './index.css';
@@ -119,9 +119,9 @@ src/components/Counter/index.js代码如下
 	export default connect( mapStateToProps )(Counter);
 
 
-为了使页面的样式好看，在Counter文件夹下新建文件index.css。
+为了使页面的样式好看，在`Counter`文件夹下新建文件`index.css`。
 
-src/components/Counter/index.css代码如下
+`src/components/Counter/index.css`代码如下
 
 	.counter {
 		height: 300px;
@@ -143,9 +143,9 @@ src/components/Counter/index.css代码如下
 	}
 
 #### (2). 处理计数器组件的reducer
-由于考虑到多页面，多组件，同时也为了体现组件化思想，所以这里我把属于哪个组件的reducer就放在哪个组件下，最后再通过一个总的reducers文件把所有的reducer导出来。所以Counter组件的reducer,就在Counter文件夹下新建一个reducer文件夹，里面新建文件reducer.js。
+由于考虑到多页面，多组件，同时也为了体现组件化思想，所以这里我把属于哪个组件的`reducer`就放在哪个组件下，最后再通过一个总的`reducers`文件把所有的`reducer`导出来。所以`Counter`组件的`reducer`,就在`Counter`文件夹下新建一个`reducer`文件夹，里面新建文件`reducer.js`。
 
-src/components/Counter/reducer/reducer.js代码如下:
+`src/components/Counter/reducer/reducer.js`代码如下:
 
 	export function handleCounter(state = 0, action ) {
 		switch( action.type) {
@@ -158,12 +158,12 @@ src/components/Counter/reducer/reducer.js代码如下:
 		}
 	}
 
-到这里，对于Counter计数器组件的定义工作大体完成了，下面我们继续定义第二个组件，获取saga数据。
+到这里，对于`Counter`计数器组件的定义工作大体完成了，下面我们继续定义第二个组件，获取saga数据。
 
 #### (3). 定义saga组件
-因为saga组件是与Counter组件并列，所以在components文件夹下新建文件夹GetSagaVal,在GetSagaVal文件夹下新建文件index.js。
+因为saga组件是与Counter组件并列，所以在components文件夹下新建文件夹`GetSagaVal`,在GetSagaVal文件夹下新建文件`index.js`。
 
-src/components/GetSagaVal/index.js代码如下:
+`src/components/GetSagaVal/index.js`代码如下:
 
 	import React from 'react';
 	import { connect } from 'react-redux';
@@ -201,9 +201,9 @@ src/components/GetSagaVal/index.js代码如下:
 	export default connect( mapStateToProps )(GetSagaVal);
 
 #### (4). 定义saga的generator函数，执行异步请求
-由于组件化思想，同时也为了方便管理组件，所以saga也是放到对应的组件下面进行管理。在GetSagaVal文件夹下新建文件夹sagas,在里面新建文件saga.js。
+由于组件化思想，同时也为了方便管理组件，所以`saga`也是放到对应的组件下面进行管理。在`GetSagaVal`文件夹下新建文件夹`sagas`,在里面新建文件`saga.js`。
 
-src/components/Counter/sagas/saga.js代码如下:
+`src/components/Counter/sagas/saga.js`代码如下:
 
 	import { put, call, takeEvery } from 'redux-saga/effects';
 	import axios from 'axios';
@@ -224,9 +224,9 @@ src/components/Counter/sagas/saga.js代码如下:
 	export default watchSaga;
 
 #### (5). 处理GetSagaVal组件的reducer
-在GetSagaVal文件夹下新建文件夹reducer,里面新建文件reducer.js。
+在`GetSagaVal`文件夹下新建文件夹`reducer`,里面新建文件`reducer.js`。
 
-src/components/GetSagaVal/reducer/reducer.js代码如下:
+`src/components/GetSagaVal/reducer/reducer.js`代码如下:
 
 	import React from 'react';
 	import { combineReducers } from 'redux';
@@ -241,9 +241,10 @@ src/components/GetSagaVal/reducer/reducer.js代码如下:
 	}
 
 #### (6). 把所有组件的reducer通过一个文件导出来
-之前为了方便管理，所以都是把每个组件对应的reducer放在相应的组件下进行管理，由于入口文件创建store时要用到所有的reducer,所以要把所有组件的reducer进行导出。
-在src文件夹下新建文件reducers.js。
-src/reducers.js代码如下：
+之前为了方便管理，所以都是把每个组件对应的`reducer`放在相应的组件下进行管理，由于入口文件创建`store`时要用到所有的`reducer`,所以要把所有组件的`reducer`进行导出。
+在src文件夹下新建文件`reducers.js`。
+
+`src/reducers.js`代码如下：
 
 	import { combineReducers } from 'redux';
 	import * as counterReducer from './components/Counter/reducer/reducer.js';
@@ -256,7 +257,7 @@ src/reducers.js代码如下：
 	});
 
 #### (7). 在入口文件创建store,定义路由
-修改入口文件index.js,并且定义路由。
+修改入口文件`index.js`,并且定义路由。
 
 src/index.js代码如下：
 
@@ -293,7 +294,18 @@ src/index.js代码如下：
 
 	serviceWorker.unregister();
 
-到这里，这个例子就已经完成了，把router、redux、saga、axios都引进去了。
+到这里，这个例子就已经完成了，把`router、redux、saga、axios`都引进去了。
+
+具体文件结构如下：
+![文件结构](https://github.com/LiJinLan/react-demo/raw/master/react-demo-images/structure.png "文件结构")
 
 ## 三、实现效果
+刷新页面，可以看到页面初始加载的是计数器，点击增加或减少按钮，计数器的数字会相应改变，点击**“跳转到第二页面按钮”**，则会跳转到请求`saga`的页面，注意，url地址栏也发生了改变，一开始没有saga数据时，显示的是“无”，当点击**“获取saga数据”**按钮时，页面发生了改变，显示出了第一个saga数据的名字，点击**“跳转到第一页面”**按钮，则会返回到计数器页面，实现不同页面间的跳转。
 
+![页面1](https://github.com/LiJinLan/react-demo/raw/master/react-demo-images/resoult2.png "页面1")
+
+
+![页面2](https://github.com/LiJinLan/react-demo/raw/master/react-demo-images/resoult3.png "页面2")
+
+
+![saga请求](https://github.com/LiJinLan/react-demo/raw/master/react-demo-images/resoult4.png "saga请求")
